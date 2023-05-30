@@ -2,7 +2,8 @@ import { Link } from "react-router-dom";
 import style from "styled-components";
 export const Containerlogin = style.div`
 width: 100vw;
-background-color: black;
+background: linear-gradient(180deg, #100F0F 74.66%, #360707 100%);
+
 height: 34rem;
 `;
 export const TitleLogin = style.h1`
@@ -18,8 +19,7 @@ width: 100vw;
 export const FormularioLogin = style.form`
   height: 370px;
   width: 369px;
-
-  border-radius: 4px;
+  border-radius: 6rem;
   padding: 42px 22px 42px 22px;
   display: flex;
   flex-direction: column;
@@ -118,5 +118,6 @@ padding: 0px 16px 0px 16px;
 export const DivContent = style.div`
 width: 100vw;
     height: 100vh;
-    background-color: black;
+    background: linear-gradient(180deg, #100F0F 74.66%, #360707 100%);
+
 `;

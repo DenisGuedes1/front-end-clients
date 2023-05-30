@@ -8,7 +8,6 @@ import {
   DivConteiner,
   TitleEbtn,
   TitleP,
-  ButtonBack,
   Formulario,
   TitleForm,
   LabelAll,
@@ -37,9 +36,7 @@ export const FormRegister = () => {
 
  
    const navigateLogin = useNavigate()
-   const pageRegister = ()=>{
-      navigateLogin("/login")
-   }
+
     const onSubmitFunction = (data) =>{
        console.log(data,"data register")
        console.log(data.phone)
@@ -61,7 +58,7 @@ export const FormRegister = () => {
         <DivConteiner>
             <TitleEbtn>
                 <TitleP>Seja bem vindo!</TitleP>
-                <ButtonBack onClick={()=> pageRegister}>Voltar</ButtonBack>
+               
             </TitleEbtn>
             <Formulario onSubmit={handleSubmit(onSubmitFunction)}>
                 <TitleForm>Crie sua conta </TitleForm>

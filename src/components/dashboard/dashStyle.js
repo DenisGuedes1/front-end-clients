@@ -86,27 +86,24 @@ display: flex;
 `;
 export const ModalDivEdit = style.div`
 display: flex;
-    flex-direction: column;
-    width: 64%;
-    height: 1rem;
-    gap: 12rem;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-   
-    margin: 9rem 0rem 0rem 26rem;
+flex-direction: column;
+width: 64%;
+height: 50rem;
+margin: -14rem 0rem 0rem 51rem;
+
+
   
 `;
 export const FormEdit = style.form`
 
-    display: flex;
+display: flex;
     flex-direction: column;
     -webkit-box-pack: center;
     justify-content: center;
     -webkit-box-align: center;
     align-items: center;
     width: 41%;
-    height: 33rem;
+    height: 80%;
     gap: 1rem;
     background-color: rgb(33, 37, 41);
 
@@ -121,6 +118,7 @@ width: 41%;
 height: 55rem;
 gap:1rem;
 background-color: #212529;
+border-radius: 8rem;
 `;
 export const SpanbtnClose = style.span` 
 display: flex;
@@ -142,7 +140,7 @@ font-size: 12px;
 font-weight: 400;
 letter-spacing: 0em;
 text-align: left;
-width: 20rem;
+width: 30rem;
 
 color:#F8F9FA;
 `;
@@ -151,7 +149,7 @@ height: 48px;
 width: 330px;
 left: 0px;
 
-border-radius: 4px;
+border-radius: 1rem;
 background-color: #343B41;
 color:#F8F9FA;
 && placceholder{
@@ -171,11 +169,12 @@ color:#F8F9FA;
 outline:#343B41;
 `;
 export const SpanTitleEClose = style.span`
-gap: 8rem;
+gap: 13rem;
 display: flex;
 background-color: #343B41;
 widht:24rem;
 padding:1rem;
+border-radius: 1rem;
 `;
 export const ButtonCLoseModal = style.button`
 background-color: #343B41;
@@ -249,7 +248,20 @@ width: 70%;
 padding: 2rem;
 background-color: rgba(33, 37, 41, 1);
 `;
-
+export const SpanbtnCtt = style.span`
+display: flex;
+gap: 2rem;
+`
+export const ButtonCtt = style.button`
+border-radius: 2rem;
+cursor: pointer;
+`
+export const SpanTitleCloseDash = style.span`
+gap: 16rem;
+    display: flex;
+    background-color: rgb(52, 59, 65);
+    padding: 1rem;
+`
 export const UlConteinerContact = style.ul`
 
 height: 40%;

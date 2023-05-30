@@ -9,7 +9,8 @@ export const Global = createGlobalStyle`
   --color-success: #7CC39C;
   --color-warning: #FBEA85;
   --color-error: #EA524F;
-
+ 
+ 
   font-size: 60%;  
 }
 

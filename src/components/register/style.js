@@ -3,6 +3,7 @@ import style from "styled-components";
 export const DivConteiner = style.div`
 width: 100%;
 
+
 `;
 export const TitleEbtn = style.span`
 display: flex;
@@ -37,6 +38,7 @@ flex-direction: column;
 align-items: center;
 justify-content: center;
 gap: 2px;
+border-radius: 6rem;
 margin: 0 auto;
 width: 40%;
 height: 45rem;
@@ -52,7 +54,8 @@ text-align: left;
 color: white;
 `;
 export const LabelAll = style.label`
-width: 33%;
+font-family: "Inter", sans-serif;
+width: 56%;
 color: white;
 position: initial;
 `;

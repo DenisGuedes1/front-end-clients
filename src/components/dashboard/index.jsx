@@ -5,7 +5,11 @@ import { useForm } from "react-hook-form";
 import { useContext, useState} from "react"
 import axios from "axios"
 import {toast} from "react-toastify"
-import {Btnlogout,FormAddContact,ButtonCadContact,ButtonOpenModal,DivNameTitleBtnADD,HeaderInfoUser,InputModalAdd,LabelAll,ModalDiv,NameTiltle,NavDash,SpanHeader,SpanTitleEClose,TitleModalAddContact,H1Contact, EmailContact, MainContact,LiContactList, UlConteinerContact, SectionContact, NameContact, ButtonCLoseModal, ModalDivEdit, FormEdit}from "./dashStyle"
+import {Btnlogout,FormAddContact,ButtonCadContact,ButtonOpenModal,DivNameTitleBtnADD,HeaderInfoUser,InputModalAdd,LabelAll,ModalDiv,NameTiltle,NavDash,SpanHeader,SpanTitleEClose,TitleModalAddContact,H1Contact, EmailContact, MainContact,LiContactList, UlConteinerContact, SectionContact, NameContact,SpanbtnCtt,ButtonCLoseModal,ButtonCtt ,ModalDivEdit,SpanTitleCloseDash,FormEdit}from "./dashStyle"
+import ModalEditUser from "../modal/indexModal";
+import ModalInfoUser from"../modal/modalRead" 
+import{CgTrash, CgLogOff,CgColorPicker ,CgEyeAlt,CgPen} from "react-icons/cg"
+
 
 export const DashUser = () =>{
 
@@ -15,8 +19,15 @@ export const DashUser = () =>{
          modalOpen,
          setModalOpen,
          logout,modalOpenEdit,setModalOpenEdit,
-         submitForm,user,respContact,deleteContact,  modalCloseEdit, closeModalEdit
+         submitForm,user,respContact,deleteContact,  modalCloseEdit, closeModalEdit,setModalOpenUser, modalOpenUser, modalOpenInfo, setModalOpenInfo
     } = useContext(AuthContextContact)
+    const pageEdit =() =>{
+        setModalOpenUser(true)
+
+     }
+    const pageInfo = () =>{
+      setModalOpenInfo(true)
+    } 
     let arrayContact = Object.values(respContact)
     const formSchemaCreatedContact= yup.object().shape({
         name: yup.string().required("nome do contato obrigatorio"),
@@ -101,6 +112,7 @@ export const DashUser = () =>{
     if(!token){
         window.location.href="/login"
     }
+    
     return(
          <>
             {modalOpen && (
@@ -133,8 +145,9 @@ export const DashUser = () =>{
 
             <NavDash>
                 <SpanHeader>
-                  <Btnlogout onClick={()=> logout()}>Sair</Btnlogout>   
-                    <button>Editar informações chaqamr modal</button>
+                    <Btnlogout onClick={()=>pageEdit()}><CgColorPicker/></Btnlogout>
+                    <Btnlogout onClick={()=>pageInfo()}><CgEyeAlt/></Btnlogout>
+                  <Btnlogout onClick={()=> logout()}><CgLogOff/></Btnlogout>   
                 </SpanHeader>
             </NavDash>
             <HeaderInfoUser>
@@ -157,10 +170,10 @@ export const DashUser = () =>{
                                         <EmailContact>{elemento.email} </EmailContact>
                                         <EmailContact>{elemento.phone} </EmailContact>
                                         <EmailContact>{elemento.date_register} </EmailContact>
-                                        <span>
-                                         <button id={elemento.id} onClick={()=>handleEdit(elemento.id) }>Editar</button>
-                                         <button onClick={()=> deleteContact(elemento.id)} >Excluir</button>
-                                        </span>
+                                        <SpanbtnCtt>
+                                         <ButtonCtt id={elemento.id} onClick={()=>handleEdit(elemento.id) }> <CgPen/></ButtonCtt>
+                                         <ButtonCtt onClick={()=> deleteContact(elemento.id)}><CgTrash/></ButtonCtt>
+                                        </SpanbtnCtt>
                                     </LiContactList>
                                 </UlConteinerContact>
                             )
@@ -172,12 +185,12 @@ export const DashUser = () =>{
                 {modalOpenEdit && (
             <ModalDivEdit>
                 <FormEdit onSubmit={handleSubmitEdit}>
-                   <SpanTitleEClose>
+                   <SpanTitleCloseDash>
                     <TitleModalAddContact>Editar Contato</TitleModalAddContact>
                      <ButtonCLoseModal onClick={()=> closeModalEdit()} disabled={modalCloseEdit}>
                        X
                      </ButtonCLoseModal>
-                   </SpanTitleEClose>
+                   </SpanTitleCloseDash>
                    <LabelAll>Nome</LabelAll>
                    <InputModalAdd type="text" name="name" value={dadosFormulario.name} onChange={handleChange} placeholder="insira o nome"/>
                
@@ -199,6 +212,14 @@ export const DashUser = () =>{
 
                 </FormEdit>
             </ModalDivEdit>
+            )}
+             {modalOpenUser && (
+                <ModalEditUser/>
+
+            )}
+             {modalOpenInfo && (
+                <ModalInfoUser/>
+
             )}
             
            

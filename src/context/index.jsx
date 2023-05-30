@@ -47,14 +47,14 @@ export const AuthProvider = ({ children }) => {
    
       response.data.token = token 
       
-     toast.success("Login efetuado com sucesso!")
-     setTimeout(() => {
-      navigate("/dashboard"); 
-    }, 2000);
+      toast.success("Login efetuado com sucesso!")
+      setTimeout(() => {
+        navigate("/dashboard"); 
+      }, 5000);
     } catch (error) {
       console.log(error);
       toast.error("Verifique suas credenciais ,estão correta.");
-      alert(error);
+     
     }
   };
   const registerUser = async (formData, setLoading) => {
@@ -62,37 +62,37 @@ export const AuthProvider = ({ children }) => {
       setLoading(true);
       const response = await axios.post("http://localhost:3000/register", formData);
 
-
-
-
-
        localStorage.setItem("@tokenUser", response.data.token);
+       toast("Usuário registrado com sucesso!");
 
       setTimeout(() => {
       navigate("/login", { replace: true });
-      }, 6000);
-      toast("Usuário registrado com sucesso!");
+      }, 3000);
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
     }
   };
-  const deleteUserAccout = async()=>{
+  const deleteUserAccout = async(event)=>{
+    event.preventDefault();
+
    try {
 
     const token = localStorage.getItem("@tokenUser")
     if(!token){
       return;
     }
-    await api.delete("/user/delete-account",{
+    const responseDelete = await axios.delete("http://localhost:3000/user/delete-account",{
       headers:{
         Authorization: `Bearer ${token}`,
       }
     })
-    setUser([]);
+  
+     setUser([]);
     localStorage.removeItem("@tokenUser")
-    navigate("/register")
+     navigate("/register")
+     console.log(responseDelete)
     toast.success("Conta excluida com sucesso")
     
    } catch (error) {
@@ -100,10 +100,37 @@ export const AuthProvider = ({ children }) => {
      console.log(error)
    }
   }
+  const updateUserData = async (data) => {
+    try {
+      const token = localStorage.getItem('@tokenUser');
+      if (!token) {
+        return;
+      }
+  
+      const response = await api.patch('http://localhost:3000/user/dashboard/update', data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        timeout: 30000,
+      });
+      console.log(response)
+  
+      if (response.request.status === 200) {
+        toast.success('Dados atualizados com sucesso!');
+       
+      } else {
+        toast.error('Ops! Algo deu errado ao atualizar os dados.');
+      }
+    } catch (error) {
+      toast.error('Ops! Houve um erro ao atualizar os dados.');
+      console.log(error);
+    }
+  };
+  
 
   return (
     <AuthContext.Provider
-      value={{ registerUser, loginUser, User, toast, loading, deleteUserAccout }}
+      value={{ registerUser,updateUserData , loginUser, User, toast, loading, deleteUserAccout }}
     >
       {children}
     </AuthContext.Provider>
@@ -111,5 +138,5 @@ export const AuthProvider = ({ children }) => {
 };
 AuthProvider.propTypes = {
     children: PropTypes.node.isRequired
-  };
+};
   

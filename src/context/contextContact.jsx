@@ -11,14 +11,18 @@ export const AuthProviderContact = ({children}) =>{
     const [user, setUser] = useState({})
     
     const [modalOpen, setModalOpen] = useState(false)
+    const [modalOpenUser, setModalOpenUser] = useState(false)
+    const [modalCloseUser, setModalCloseUser] = useState(false)
     const [modalOpenEdit, setModalOpenEdit] = useState(false)
+    const [modalOpenInfo, setModalOpenInfo] = useState(false)
+    const [modalCloseInfo, setModalInfoClose] = useState(false)
     const [modalClose, setModalClose] = useState(false)
     const [modalCloseEdit, setModalCloseEdit] = useState(false)
 
     const token = localStorage.getItem("@tokenUser")
-
+    
     const submitForm = async (data)=>{
-        console.log(data)
+       
         const newContact ={
             name: data.name,
             email:data.email,
@@ -29,16 +33,20 @@ export const AuthProviderContact = ({children}) =>{
                 headers:{
                     Authorization:`Bearer ${token}`
                 }
+             
             })
-
-            if(response.request.status === "Created"){
+             console.log(response)
+            if(response.request.statusText === "Created"){
                 toast("Contato criado com sucesso.")
-            }else {
+            }
+        } catch (error) {
+
+            if(error.response.statusText === "Conflict"){
+                toast.error("Email ja registrado!")
+            }
+            else {
                 toast.error("Ops!algo deu errado.")
             }            
-        } catch (error) {
-            toast.error(error.menssage)
-            console.log(error)            
         }
     };
     useEffect(()=>{
@@ -84,6 +92,20 @@ export const AuthProviderContact = ({children}) =>{
             setModalOpenEdit(false)
         }, 600)
     }
+    const closeModalEditUser = () =>{
+        setModalCloseUser(true);
+        setTimeout(()=>{
+            setModalCloseUser(false)
+            setModalOpenUser(false)
+        }, 600)
+    }
+    const closeModalInfoUser = () =>{
+        setModalInfoClose(true);
+        setTimeout(()=>{
+            setModalInfoClose(false)
+            setModalOpenInfo(false)
+        }, 600)
+    }
 
     const deleteContact = async (elemento) =>{
        
@@ -94,7 +116,7 @@ export const AuthProviderContact = ({children}) =>{
                 },
             })
            
-            if(response.request.status === "No Content"){
+            if(response.request.status === 204){
                 toast.success("Contact deletado!")
                 closeModal()
             }
@@ -137,7 +159,7 @@ export const AuthProviderContact = ({children}) =>{
     };
     
     return (
-        <AuthContextContact.Provider value={{deleteContact, modalClose, respContact,modalOpen, user, setUser,modalOpenEdit, setModalOpenEdit, logout,submitForm,closeModal, setModalOpen,submitFormEdit, modalCloseEdit, closeModalEdit,setModalCloseEdit}}>
+        <AuthContextContact.Provider value={{deleteContact, modalClose, respContact,modalOpen, user, setUser,modalOpenEdit, setModalOpenEdit, logout,submitForm,closeModal, setModalOpen,submitFormEdit, modalCloseEdit, modalOpenUser,setModalOpenUser, closeModalEdit,setModalCloseEdit,setModalCloseUser,modalCloseUser, closeModalEditUser, modalOpenInfo, setModalOpenInfo, modalCloseInfo, closeModalInfoUser}}>
             {children}
         </AuthContextContact.Provider>
     )

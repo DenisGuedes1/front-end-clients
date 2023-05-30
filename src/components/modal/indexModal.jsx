@@ -1,92 +1,95 @@
-import { useContext } from "react"
-import  { useState } from 'react';
-import * as yup from "yup"
-import {yupResolver} from "@hookform/resolvers/yup"
+import { useContext } from "react";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { AuthContextContact } from '../../context/contextContact';
-import{ButtonCadContact, ModalDiv, FormAddContact,SpanTitleEClose, TitleModalAddContact, ButtonCLoseModal, LabelAll, InputModalAdd} from "../../components/dashboard/dashStyle"
-
-const ModalEditContato =() => {
-    const {
-        editContact,modalCloseEdit, setModalCloseEdit,setModalOpenEdit,
-            
-    } = useContext(AuthContextContact)
-  const [nome, setNome] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
+import { AuthContextContact } from "../../context/contextContact";
+import {
+  ButtonCadContact,
+  TitleModalAddContact,
+  ButtonCLoseModal,
+  InputModalAdd,
+} from "../../components/dashboard/dashStyle";
+import { AuthContext } from "../../context/index";
+import {
+  FormModal,
+  ModalDivModal,
+  SpanModal,
+  LabelModal,
   
+} from "./styleModa";
+const ModalEditUser = () => {
+  const { modalCloseUser, closeModalEditUser } = useContext(AuthContextContact);
 
-  const handleNomeChange = (event) => {
-    setNome(event.target.value);
-  };
+  const {  updateUserData } = useContext(AuthContext);
 
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
-  };
-
-  const handleSenhaChange = (event) => {
-    setPhone(event.target.value);
-  };
-
-
-  
-  const formSchemaCreatedContact= yup.object().shape({
+  const formSchemaCreatedContact = yup.object().shape({
     name: yup.string(),
     email: yup.string(),
     phone: yup.string(),
- 
-})
-const onSubmitFunction = (data) => {
-  console.log(data)
-   
-    editContact(data);
-  };
+  });
 
-const {
-    
-    handleSubmit,
-    
-  } = useForm({
+  const { register, handleSubmit } = useForm({
     resolver: yupResolver(formSchemaCreatedContact),
   });
-  const closeModal = () =>{
-    setModalCloseEdit(true);
-    setTimeout(()=>{
-      setModalCloseEdit(false)
-        setModalOpenEdit(false)
-    }, 600)
-}
+
+  const onSubmitFunction = (data) => {
+    const baseData = {
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      phone: parseInt(data.phone),
+    };
+    console.log(baseData);
+    updateUserData(baseData);
+  };
+
   return (
     <>
-      
-
-      <ModalDiv>
-
-        <FormAddContact onSubmit={handleSubmit(onSubmitFunction)}>
-            <SpanTitleEClose>
+      <ModalDivModal>
+        <FormModal onSubmit={handleSubmit(onSubmitFunction)}>
+          <SpanModal>
             <TitleModalAddContact>Editar</TitleModalAddContact>
-            <ButtonCLoseModal onClick={()=> closeModal()} disabled={modalCloseEdit}>X</ButtonCLoseModal>
-            </SpanTitleEClose>
-        
-            <LabelAll htmlFor="nome">Nome:</LabelAll>
-            <InputModalAdd type="text" id="nome" value={nome} onChange={handleNomeChange} />
-         
+            <ButtonCLoseModal
+              onClick={() => closeModalEditUser()}
+              disabled={modalCloseUser}
+            >
+              X
+            </ButtonCLoseModal>
+          </SpanModal>
+
+          <LabelModal htmlFor="nome">Nome:</LabelModal>
+          <InputModalAdd
+            placeholder="digite seu nome"
+            type="text"
+            {...register("name")}
+          />
+
+          <LabelModal htmlFor="email">Email:</LabelModal>
+          <InputModalAdd
+            placeholder="digite seu email"
+            type="email"
+            {...register("email")}
+          />
+
+          <LabelModal htmlFor="password">Senha:</LabelModal>
+          <InputModalAdd type="password" {...register("password")} />
+
+          <LabelModal htmlFor="phone">Phone:</LabelModal>
+          <InputModalAdd type="number" {...register("phone")} />
 
          
-            <LabelAll htmlFor="email">Email:</LabelAll>
-            <InputModalAdd type="email" id="email" value={email} onChange={handleEmailChange} />
-         
+            <ButtonCadContact
+              type="submit"
+              onSubmit={handleSubmit(onSubmitFunction)}
+            >
+              Editar
+            </ButtonCadContact>
 
           
-            <LabelAll htmlFor="phone">Phone:</LabelAll>
-            <InputModalAdd type="text" value={phone} onChange={handleSenhaChange}/>
-         
-
-          <ButtonCadContact type="submit"onSubmit={handleSubmit(onSubmitFunction)} >Cadastrar</ButtonCadContact>
-        </FormAddContact>
-      </ModalDiv>
+        </FormModal>
+      </ModalDivModal>
     </>
   );
-}
+};
 
-export default ModalEditContato;
+export default ModalEditUser;
