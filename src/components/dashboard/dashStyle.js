@@ -95,18 +95,18 @@ margin: -14rem 0rem 0rem 51rem;
   
 `;
 export const FormEdit = style.form`
-
 display: flex;
-    flex-direction: column;
-    -webkit-box-pack: center;
-    justify-content: center;
-    -webkit-box-align: center;
-    align-items: center;
-    width: 41%;
-    height: 80%;
-    gap: 1rem;
-    background-color: rgb(33, 37, 41);
-
+flex-direction: column;
+-moz-box-pack: center;
+justify-content: center;
+-moz-box-align: center;
+align-items: center;
+width: 41%;
+height: 90%;
+gap: 1rem;
+background-color: rgb(33, 37, 41);
+border-radius: 5rem;
+margin: -9rem 0rem 0rem 0rem;
 `
 export const FormAddContact = style.form`
 display: flex;
@@ -114,8 +114,8 @@ display: flex;
 flex-direction: column;
 justify-content: center;
 align-items: center;
-width: 41%;
-height: 55rem;
+width: 45%;
+height: 50rem;
 gap:1rem;
 background-color: #212529;
 border-radius: 8rem;
@@ -191,7 +191,7 @@ left: 22px;
 top: 262px;
 border-radius:8px;
 padding: 0px 22px 0px 22px;
-background-color:rgba(255, 87, 127, 1);
+background-color:rgba(0, 0, 0);
 cursor:pointer;
 border-color:rgba(255, 87, 127, 1);
 cursor:pointer;
@@ -261,6 +261,7 @@ gap: 16rem;
     display: flex;
     background-color: rgb(52, 59, 65);
     padding: 1rem;
+    border-radius:1rem
 `
 export const UlConteinerContact = style.ul`
 

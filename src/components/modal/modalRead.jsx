@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import { AuthContextContact } from "../../context/contextContact";
 import {
-  ButtonCadContact,
   TitleModalAddContact,
   ButtonCLoseModal,
   InputModalAdd,
@@ -11,7 +10,7 @@ import {
   FormModal,
   ModalDivModal,
   SpanModalinfo,
-  LabelModal,
+  LabelModal,ButtonDeleteAccount
 
 } from "./styleModa";
 const ModalInfoUser = () => {
@@ -48,9 +47,9 @@ const ModalInfoUser = () => {
           <LabelModal htmlFor="phone">Phone:</LabelModal>
           <InputModalAdd type="number" defaultValue={user.phone} />
 
-          <ButtonCadContact onClick={handleDelete}>
+          <ButtonDeleteAccount onClick={handleDelete}>
             Excluir Perfil
-          </ButtonCadContact>
+          </ButtonDeleteAccount>
         </FormModal>
       </ModalDivModal>
     </>

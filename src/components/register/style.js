@@ -13,7 +13,10 @@ gap: 2rem;
 margin: 5rem auto;
 `;
 export const TitleP = style.h1`
-color: #ff577f;
+color: rgb(210, 210, 210);
+font-family: "Inter", sans-serif;
+font-size: 5rem;
+font-weight: bolder;
 `;
 export const ButtonBack = style.button`
 height: 40.10990524291992px;
@@ -87,7 +90,7 @@ padding: 0px 22px 0px 22px;
 -ms-border-radius: 8px;
 -o-border-radius: 8px;
 margin-top: 1rem;
-background-color: rgba(89, 50, 63, 1);
+background-color: rgb(0, 0, 0);
 
 font-family: "Inter", sans-serif;
 font-size: 16px;

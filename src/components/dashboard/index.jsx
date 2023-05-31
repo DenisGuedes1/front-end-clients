@@ -1,229 +1,288 @@
-import {AuthContextContact} from "../../context/contextContact"
-import * as yup from "yup"
-import {yupResolver} from "@hookform/resolvers/yup"
+import { AuthContextContact } from "../../context/contextContact";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { useContext, useState} from "react"
-import axios from "axios"
-import {toast} from "react-toastify"
-import {Btnlogout,FormAddContact,ButtonCadContact,ButtonOpenModal,DivNameTitleBtnADD,HeaderInfoUser,InputModalAdd,LabelAll,ModalDiv,NameTiltle,NavDash,SpanHeader,SpanTitleEClose,TitleModalAddContact,H1Contact, EmailContact, MainContact,LiContactList, UlConteinerContact, SectionContact, NameContact,SpanbtnCtt,ButtonCLoseModal,ButtonCtt ,ModalDivEdit,SpanTitleCloseDash,FormEdit}from "./dashStyle"
+import { useContext, useState } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
+import {
+  Btnlogout,
+  FormAddContact,
+  ButtonCadContact,
+  ButtonOpenModal,
+  DivNameTitleBtnADD,
+  HeaderInfoUser,
+  InputModalAdd,
+  LabelAll,
+  ModalDiv,
+  NameTiltle,
+  NavDash,
+  SpanHeader,
+  SpanTitleEClose,
+  TitleModalAddContact,
+  H1Contact,
+  EmailContact,
+  MainContact,
+  LiContactList,
+  UlConteinerContact,
+  SectionContact,
+  NameContact,
+  SpanbtnCtt,
+  ButtonCLoseModal,
+  ButtonCtt,
+  ModalDivEdit,
+  SpanTitleCloseDash,
+  FormEdit,
+} from "./dashStyle";
 import ModalEditUser from "../modal/indexModal";
-import ModalInfoUser from"../modal/modalRead" 
-import{CgTrash, CgLogOff,CgColorPicker ,CgEyeAlt,CgPen} from "react-icons/cg"
+import ModalInfoUser from "../modal/modalRead";
+import {
+  CgTrash,
+  CgLogOff,
+  CgColorPicker,
+  CgEyeAlt,
+  CgPen,
+} from "react-icons/cg";
 
+export const DashUser = () => {
+  const {
+    modalClose,
+    closeModal,
+    modalOpen,
+    setModalOpen,
+    logout,
+    modalOpenEdit,
+    setModalOpenEdit,
+    submitForm,
+    user,
+    respContact,
+    deleteContact,
+    modalCloseEdit,
+    closeModalEdit,
+    setModalOpenUser,
+    modalOpenUser,
+    modalOpenInfo,
+    setModalOpenInfo,
+  } = useContext(AuthContextContact);
+  const pageEdit = () => {
+    setModalOpenUser(true);
+  };
+  const pageInfo = () => {
+    setModalOpenInfo(true);
+  };
+  let arrayContact = Object.values(respContact);
+  const formSchemaCreatedContact = yup.object().shape({
+    name: yup.string().required("nome do contato obrigatorio"),
+    email: yup.string().required("email obrigatorio"),
+    phone: yup.string().required("Telefone Obrigatorio"),
+  });
 
-export const DashUser = () =>{
+  const { register, handleSubmit: handleCreatedSubmit } = useForm({
+    resolver: yupResolver(formSchemaCreatedContact),
+  });
+  const [elementoId, setElementoId] = useState("");
+  const [dadosFormulario, setDadosFormulario] = useState({
+    name: "",
+    email: "",
+    phone: "",
+  });
 
-    const {
-         modalClose, 
-         closeModal,
-         modalOpen,
-         setModalOpen,
-         logout,modalOpenEdit,setModalOpenEdit,
-         submitForm,user,respContact,deleteContact,  modalCloseEdit, closeModalEdit,setModalOpenUser, modalOpenUser, modalOpenInfo, setModalOpenInfo
-    } = useContext(AuthContextContact)
-    const pageEdit =() =>{
-        setModalOpenUser(true)
-
-     }
-    const pageInfo = () =>{
-      setModalOpenInfo(true)
-    } 
-    let arrayContact = Object.values(respContact)
-    const formSchemaCreatedContact= yup.object().shape({
-        name: yup.string().required("nome do contato obrigatorio"),
-        email: yup.string().required("email obrigatorio"),
-        phone: yup.string().required("Telefone Obrigatorio"),
-    })
-    
-    const {
-        register,
-        handleSubmit: handleCreatedSubmit,
-        
-      } = useForm({
-        resolver: yupResolver(formSchemaCreatedContact),
-      });
-      const [elementoId, setElementoId] = useState('');
-      const [dadosFormulario, setDadosFormulario] = useState({
-        name: '',
-        email: '',
-        phone: '',
-      });
-    
-
-      const handleEdit = (id) => {
-        setElementoId(id);
-        setModalOpenEdit(true);
-     
+  const handleEdit = (id) => {
+    setElementoId(id);
+    setModalOpenEdit(true);
+  };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setDadosFormulario((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+  const handleSubmitEdit = async (e) => {
+    e.preventDefault();
+    try {
+      const newContact = {
+        name: dadosFormulario.name,
+        email: dadosFormulario.email,
+        phone: parseInt(dadosFormulario.phone),
       };
-      const handleChange = (e) => {
-        const { name, value } = e.target;
-        setDadosFormulario((prevState) => ({
-          ...prevState,
-          [name]: value,
-        }));
-      };
-      const handleSubmitEdit = async (e) => {
-        e.preventDefault();
-        try {
-          const newContact = {
-            name: dadosFormulario.name,
-            email: dadosFormulario.email,
-            phone: parseInt(dadosFormulario.phone),
-          };
-    
-          const response = await submitFormEdit(newContact, elementoId);
-    
-          if (response.request.statusText  === "Ok") {
-            toast.success('Contato editado com sucesso!');
-            setModalOpenEdit(false);
-          } else if (response.request.statusText  === "not found") {
-            toast.error('Contato não encontrado!');
-          } else {
-            toast.error('Ops! Algo deu errado');
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      };
-    
-      const submitFormEdit = async (data, id) => {
-        console.log(data);
-        console.log(id);
-        try {
-          const response = await axios.patch(
-            `http://localhost:3000/user/contact/edit/${id}`,
-            data,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-    
-          return response;
-        } catch (error) {
-          console.log(error);
-        }
-      };
-    
-    
-      
-    const token = localStorage.getItem("@tokenUser")
-    if(!token){
-        window.location.href="/login"
+
+      const response = await submitFormEdit(newContact, elementoId);
+
+      if (response.request.statusText === "Ok") {
+        toast.success("Contato editado com sucesso!");
+        setModalOpenEdit(false);
+      } else if (response.request.statusText === "not found") {
+        toast.error("Contato não encontrado!");
+      } else {
+        toast.error("Ops! Algo deu errado");
+      }
+    } catch (error) {
+      console.log(error);
     }
-    
-    return(
-         <>
-            {modalOpen && (
-            <ModalDiv>
-                <FormAddContact onSubmit={ handleCreatedSubmit(submitForm)}>
-                   <SpanTitleEClose>
-                    <TitleModalAddContact> Adicionar Contato</TitleModalAddContact>
-                     <ButtonCLoseModal onClick={()=> closeModal()} disabled={modalClose}>
-                       X
-                     </ButtonCLoseModal>
-                   </SpanTitleEClose>
-                   <LabelAll>Nome</LabelAll>
-                   <InputModalAdd placeholder="insira o nome"{...register("name")}/>
-               
-                   <LabelAll>Email</LabelAll>
-                   <InputModalAdd placeholder="digite o email"{...register("email")}/>
-                   
+  };
 
-                   <LabelAll>Phone</LabelAll>
-                   <InputModalAdd placeholder="digite um telefone..."{...register("phone")}/>
-                   
-                    <ButtonCadContact type="submit" onSubmit={()=>handleCreatedSubmit(submitForm)}>
-                        Cadastrar
-                    </ButtonCadContact>
+  const submitFormEdit = async (data, id) => {
+    console.log(data);
+    console.log(id);
+    try {
+      const response = await axios.patch(
+        `http://localhost:3000/user/contact/edit/${id}`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-                </FormAddContact>
-            </ModalDiv>
-            )}
+  const token = localStorage.getItem("@tokenUser");
+  if (!token) {
+    window.location.href = "/login";
+  }
 
-            <NavDash>
-                <SpanHeader>
-                    <Btnlogout onClick={()=>pageEdit()}><CgColorPicker/></Btnlogout>
-                    <Btnlogout onClick={()=>pageInfo()}><CgEyeAlt/></Btnlogout>
-                  <Btnlogout onClick={()=> logout()}><CgLogOff/></Btnlogout>   
-                </SpanHeader>
-            </NavDash>
-            <HeaderInfoUser>
-                <NameTiltle>Seja bem vindo,{user.name} </NameTiltle>
-            </HeaderInfoUser>
+  return (
+    <>
+      {modalOpen && (
+        <ModalDiv>
+          <FormAddContact onSubmit={handleCreatedSubmit(submitForm)}>
+            <SpanTitleEClose>
+              <TitleModalAddContact> Adicionar Contato</TitleModalAddContact>
+              <ButtonCLoseModal
+                onClick={() => closeModal()}
+                disabled={modalClose}
+              >
+                X
+              </ButtonCLoseModal>
+            </SpanTitleEClose>
+            <LabelAll>Nome</LabelAll>
+            <InputModalAdd placeholder="insira o nome" {...register("name")} />
 
-            <DivNameTitleBtnADD>
-                <H1Contact>Contato</H1Contact>
-                <ButtonOpenModal onClick={()=> setModalOpen(true)}>+</ButtonOpenModal>
-            </DivNameTitleBtnADD>
-            <div>
-                <MainContact>
-                    <SectionContact>
-                        {arrayContact.map((elemento)=>{
-                          
-                            return(
-                                <UlConteinerContact key={elemento.id}>
-                                    <LiContactList key={elemento} id={elemento.id}>
-                                        <NameContact>{elemento.name} </NameContact>
-                                        <EmailContact>{elemento.email} </EmailContact>
-                                        <EmailContact>{elemento.phone} </EmailContact>
-                                        <EmailContact>{elemento.date_register} </EmailContact>
-                                        <SpanbtnCtt>
-                                         <ButtonCtt id={elemento.id} onClick={()=>handleEdit(elemento.id) }> <CgPen/></ButtonCtt>
-                                         <ButtonCtt onClick={()=> deleteContact(elemento.id)}><CgTrash/></ButtonCtt>
-                                        </SpanbtnCtt>
-                                    </LiContactList>
-                                </UlConteinerContact>
-                            )
-                        })}
-                    </SectionContact>
-                </MainContact>
-            </div>
+            <LabelAll>Email</LabelAll>
+            <InputModalAdd
+              placeholder="digite o email"
+              {...register("email")}
+            />
 
-                {modalOpenEdit && (
-            <ModalDivEdit>
-                <FormEdit onSubmit={handleSubmitEdit}>
-                   <SpanTitleCloseDash>
-                    <TitleModalAddContact>Editar Contato</TitleModalAddContact>
-                     <ButtonCLoseModal onClick={()=> closeModalEdit()} disabled={modalCloseEdit}>
-                       X
-                     </ButtonCLoseModal>
-                   </SpanTitleCloseDash>
-                   <LabelAll>Nome</LabelAll>
-                   <InputModalAdd type="text" name="name" value={dadosFormulario.name} onChange={handleChange} placeholder="insira o nome"/>
-               
-                   <LabelAll>Email</LabelAll>
-                   <InputModalAdd type="email" name="email"
-                    value={dadosFormulario.email}
-                    onChange={handleChange} placeholder="digite o email"/>
-                   
+            <LabelAll>Phone</LabelAll>
+            <InputModalAdd
+              placeholder="digite um telefone..."
+              {...register("phone")}
+            />
 
-                   <LabelAll>Phone</LabelAll>
-                   <InputModalAdd type="number" name="phone"
-                    value={dadosFormulario.phone}
-                    onChange={handleChange} placeholder="digite um telefone..."/>
-                   
-                    <ButtonCadContact type="submit">
-                        editar
-                    </ButtonCadContact>
+            <ButtonCadContact
+              type="submit"
+              onSubmit={() => handleCreatedSubmit(submitForm)}
+            >
+              Cadastrar
+            </ButtonCadContact>
+          </FormAddContact>
+        </ModalDiv>
+      )}
 
+      <NavDash>
+        <SpanHeader>
+          <Btnlogout onClick={() => pageEdit()}>
+            <CgColorPicker />
+          </Btnlogout>
+          <Btnlogout onClick={() => pageInfo()}>
+            <CgEyeAlt />
+          </Btnlogout>
+          <Btnlogout onClick={() => logout()}>
+            <CgLogOff />
+          </Btnlogout>
+        </SpanHeader>
+      </NavDash>
+      <HeaderInfoUser>
+        <NameTiltle>Seja bem vindo,{user.name} </NameTiltle>
+      </HeaderInfoUser>
 
-                </FormEdit>
-            </ModalDivEdit>
-            )}
-             {modalOpenUser && (
-                <ModalEditUser/>
+      <DivNameTitleBtnADD>
+        <H1Contact>Contato</H1Contact>
+        <ButtonOpenModal onClick={() => setModalOpen(true)}>+</ButtonOpenModal>
+      </DivNameTitleBtnADD>
+      <div>
+        <MainContact>
+          <SectionContact>
+            {arrayContact.map((elemento) => {
+              return (
+                <UlConteinerContact key={elemento.id}>
+                  <LiContactList key={elemento} id={elemento.id}>
+                    <NameContact>{elemento.name} </NameContact>
+                    <EmailContact>{elemento.email} </EmailContact>
+                    <EmailContact>{elemento.phone} </EmailContact>
+                    <EmailContact>{elemento.date_register} </EmailContact>
+                    <SpanbtnCtt>
+                      <ButtonCtt
+                        id={elemento.id}
+                        onClick={() => handleEdit(elemento.id)}
+                      >
+                        {" "}
+                        <CgPen />
+                      </ButtonCtt>
+                      <ButtonCtt onClick={() => deleteContact(elemento.id)}>
+                        <CgTrash />
+                      </ButtonCtt>
+                    </SpanbtnCtt>
+                  </LiContactList>
+                </UlConteinerContact>
+              );
+            })}
+          </SectionContact>
+        </MainContact>
+      </div>
 
-            )}
-             {modalOpenInfo && (
-                <ModalInfoUser/>
+      {modalOpenEdit && (
+        <ModalDivEdit>
+          <FormEdit onSubmit={handleSubmitEdit}>
+            <SpanTitleCloseDash>
+              <TitleModalAddContact>Editar Contato</TitleModalAddContact>
+              <ButtonCLoseModal
+                onClick={() => closeModalEdit()}
+                disabled={modalCloseEdit}
+              >
+                X
+              </ButtonCLoseModal>
+            </SpanTitleCloseDash>
+            <LabelAll>Nome</LabelAll>
+            <InputModalAdd
+              type="text"
+              name="name"
+              value={dadosFormulario.name}
+              onChange={handleChange}
+              placeholder="insira o nome"
+            />
 
-            )}
-            
-           
-         </>
+            <LabelAll>Email</LabelAll>
+            <InputModalAdd
+              type="email"
+              name="email"
+              value={dadosFormulario.email}
+              onChange={handleChange}
+              placeholder="digite o  email"
+            />
 
-    )
-}
+            <LabelAll>Phone</LabelAll>
+            <InputModalAdd
+              type="number"
+              name="phone"
+              value={dadosFormulario.phone}
+              onChange={handleChange}
+              placeholder="digite um telefone..."
+            />
+
+            <ButtonCadContact type="submit">editar</ButtonCadContact>
+          </FormEdit>
+        </ModalDivEdit>
+      )}
+      {modalOpenUser && <ModalEditUser />}
+      {modalOpenInfo && <ModalInfoUser />}
+    </>
+  );
+};

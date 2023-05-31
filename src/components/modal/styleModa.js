@@ -38,6 +38,21 @@ background-color: rgb(52, 59, 65);
 padding: 1rem;
 
 `
+export const ButtonDeleteAccount = style.button`
+height: 48px;
+width: 324px;
+left: 22px;
+top: 262px;
+border-radius: 8px;
+padding: 0px 22px;
+background-color: rgb(232, 18, 18);
+border-color: rgb(170, 170, 170);
+cursor: pointer;
+color: rgba(0, 0, 0, 0);
+font-family: "Inter", sans-serif;
+color: white;
+
+`
 export const SpanModalinfo = style.span`
 gap: 20rem;
     border-radius: 1rem;

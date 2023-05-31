@@ -7,14 +7,16 @@ background: linear-gradient(180deg, #100F0F 74.66%, #360707 100%);
 height: 34rem;
 `;
 export const TitleLogin = style.h1`
-color: #ff577f;
+// color: #ff577f;
 
 display: flex;
 align-items: center;
 align-content: center;
 justify-content: center;
-margin-top: 10rem;
+ margin-top: 10rem;
 width: 100vw;
+font-family: "Inter", sans-serif;
+font-size: 5rem;
 `;
 export const FormularioLogin = style.form`
   height: 370px;
@@ -63,7 +65,7 @@ padding: 0px 22px 0px 22px;
 -moz-border-radius: 8px;
 -ms-border-radius: 8px;
 -o-border-radius: 8px;
-background-color: #ff577f;
+background-color: rgba(0,0,0);;
 font-family: "Inter", sans-serif;
 font-size: 16px;
 font-weight: 500;
